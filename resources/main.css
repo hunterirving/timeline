@@ -1,0 +1,206 @@
+:root {
+	--bg: #111;
+	--column-track-bg: #1a1a1a;
+	--grape-soda: #602bff;
+	--lobster: #ff4d00;
+	--bramble: #489761;
+	--bubble-yum: #ff2ea8;
+	--slate: #9a99a0;
+	--blue-raspberry: #0085e3;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	user-select: none;
+}
+
+html, body {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	background-color: var(--bg);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	color: #fff;
+}
+
+body {
+	display: flex;
+	position: relative;
+}
+
+.pane {
+	width: 50%;
+	height: 100%;
+	display: flex;
+	position: relative;
+}
+
+#plan {
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+#actual {
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.text-area {
+	flex: 1;
+	position: relative;
+	min-width: 0;
+}
+
+.column-track {
+	width: 72px;
+	flex-shrink: 0;
+	position: relative;
+	padding-top: 24px;
+	padding-bottom: 24px;
+	height: 100%;
+}
+
+.column-track::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: var(--column-track-bg);
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+html:hover .column-track::before {
+	opacity: 1;
+}
+
+.column {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	cursor: copy;
+	z-index: 1;
+}
+
+body.dragging,
+body.dragging * {
+	cursor: grabbing !important;
+}
+
+.chunk {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	border-radius: 6px;
+	cursor: grab;
+	min-height: 4px;
+	transition: box-shadow 0.15s;
+}
+
+body.shift-held .chunk {
+	cursor: not-allowed;
+}
+
+.chunk:active {
+	cursor: grabbing;
+}
+
+.chunk.selected {
+	z-index: 3;
+}
+
+html:hover .chunk.selected {
+	box-shadow: 0 0 0 2px #fff;
+}
+
+.chunk-handle {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 8px;
+	cursor: ns-resize;
+	z-index: 2;
+}
+
+.chunk-handle-top {
+	top: -4px;
+}
+
+.chunk-handle-bottom {
+	bottom: -4px;
+}
+
+#pill-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.time-pill {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #333;
+	border-radius: 999px;
+	white-space: nowrap;
+	pointer-events: none;
+	z-index: 10;
+	opacity: 0;
+	transition: opacity 0.2s;
+	padding: 2px 8px;
+	font-size: 10px;
+	color: #ccc;
+}
+
+body.tracks-hover .time-pill {
+	opacity: 1;
+}
+
+.chunk-label {
+	position: absolute;
+	left: 0;
+	right: 0;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	pointer-events: none;
+	padding: 0 8px;
+}
+
+#plan .chunk-label {
+	text-align: right;
+	justify-content: flex-end;
+}
+
+#actual .chunk-label {
+	text-align: left;
+	justify-content: flex-start;
+}
+
+.chunk-label span {
+	line-height: 1.15;
+	word-break: break-word;
+}
+
+#text-input {
+	position: fixed;
+	left: -9999px;
+	top: -9999px;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+#now-line {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 0;
+	border-top: 2px dotted rgba(255, 255, 255, 0.4);
+	pointer-events: none;
+	z-index: 10;
+	display: none;
+}
