@@ -126,23 +126,13 @@
 		return lines.join("\n");
 	}
 
-	async function sendTimelineEmail(chunks, tick, minutesToTime) {
+	function sendTimelineEmail(chunks, tick, minutesToTime) {
 		const body = buildEmailBody(chunks, tick, minutesToTime);
 		if (!body) return;
 
-		let recipients;
-		try {
-			const resp = await fetch("mailto.md");
-			const text = await resp.text();
-			recipients = text.split("\n").map(l => l.trim()).filter(Boolean);
-		} catch {
-			return;
-		}
-		if (recipients.length === 0) return;
-
 		const today = new Date();
 		const subject = "timeline \u00B7 " + today.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-		const mailto = "mailto:" + recipients.join(",")
+		const mailto = "mailto:"
 			+ "?subject=" + encodeURIComponent(subject)
 			+ "&body=" + encodeURIComponent(body);
 
