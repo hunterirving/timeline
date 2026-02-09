@@ -199,7 +199,7 @@
 
 		for (const group of merged) {
 			const avgY = group.reduce((sum, p) => sum + p.y, 0) / group.length;
-			const text = group.map(p => minutesToTime(p.time)).join(" / ");
+			const text = group.map(p => minutesToTime(p.time)).join(" \u00B7 ");
 
 			const pill = document.createElement("div");
 			pill.className = "time-pill";
