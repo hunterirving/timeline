@@ -6,7 +6,7 @@
 	const DEFAULT_END = 20 * 60;
 	const MIN_TIME = -4 * 60;
 	const MAX_TIME = 32 * 60;
-	const NEW_CHUNK_DURATION = 60;
+	const NEW_CHUNK_DURATION = 30;
 	const TRACK_PAD = 24;
 	const PILL_MERGE_PX = 16;
 
@@ -490,6 +490,20 @@
 		}
 	});
 
+	function pinCursorToEnd() {
+		const len = textInput.value.length;
+		textInput.setSelectionRange(len, len);
+	}
+
+	textInput.addEventListener("keydown", (e) => {
+		if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Home") {
+			e.preventDefault();
+		}
+	});
+	textInput.addEventListener("select", pinCursorToEnd);
+	textInput.addEventListener("click", pinCursorToEnd);
+	textInput.addEventListener("focus", pinCursorToEnd);
+
 	let mailtoNavigating = false;
 
 	window.addEventListener("beforeunload", (e) => {
@@ -624,7 +638,7 @@
 	setInterval(() => {
 		renderNowLine();
 		checkChimes();
-	}, 10000);
+	}, 5000);
 
 	render();
 	checkChimes();
