@@ -16,6 +16,7 @@ once your day is over, you can use the two columns to reflect on what you accomp
 
 ## usage
 - click anywhere within the central pillar to add a new "chunk"
+	- while a chunk is active (white border), type to update its description
 	- click and drag chunks to reposition them within their columns
 	- use the resize handles along the top/bottom edges of each chunk to adjust their durations
 	- scroll up or down while hovering a chunk to change its color
