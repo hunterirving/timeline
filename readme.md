@@ -10,9 +10,9 @@
 ## tomorrow's the big day
 at night, use the `left column` to plan the day ahead.
 
-when you wake up, use the `right column` to keep a record of how things go.
+once you wake up, use the `right column` to keep a record of how things go.
 
-once your day is over, you can use the two columns to reflect on what you accomplished.
+when your day is over, you can use the two columns to reflect on what you accomplished.
 
 ## usage
 - click anywhere within the central pillar to add a new "chunk"
