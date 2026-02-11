@@ -377,39 +377,37 @@
 			if (en > MAX_TIME) { en = MAX_TIME; s = en - dur; }
 
 			const cursorTime = yToTime(e.clientY - rect.top);
+			let overlaps = false;
 			for (const c of others) {
-				if (s < c.end && en > c.start) {
-					const cMid = (c.start + c.end) / 2;
-					const preferAbove = cursorTime <= cMid;
-					if (preferAbove) {
-						const aboveS = c.start - dur;
-						const aboveE = c.start;
-						let aboveOk = aboveS >= MIN_TIME;
-						if (aboveOk) {
-							for (const o of others) {
-								if (o !== c && aboveS < o.end && aboveE > o.start) { aboveOk = false; break; }
-							}
-						}
-						if (aboveOk) {
-							s = aboveS; en = aboveE;
-						} else {
-							s = c.end; en = s + dur;
-						}
-					} else {
-						const belowS = c.end;
-						const belowE = c.end + dur;
-						let belowOk = belowE <= MAX_TIME;
-						if (belowOk) {
-							for (const o of others) {
-								if (o !== c && belowS < o.end && belowE > o.start) { belowOk = false; break; }
-							}
-						}
-						if (belowOk) {
-							s = belowS; en = belowE;
-						} else {
-							en = c.start; s = en - dur;
-						}
+				if (s < c.end && en > c.start) { overlaps = true; break; }
+			}
+			if (overlaps) {
+				// Build list of gaps between existing chunks that can fit dur
+				const gaps = [];
+				let gapStart = MIN_TIME;
+				for (const c of others) {
+					const gapEnd = c.start;
+					if (gapEnd - gapStart >= dur) gaps.push({ start: gapStart, end: gapEnd });
+					gapStart = c.end;
+				}
+				if (MAX_TIME - gapStart >= dur) gaps.push({ start: gapStart, end: MAX_TIME });
+
+				// For each gap, find the best placement (closest to cursor)
+				let bestS = null, bestDist = Infinity;
+				for (const gap of gaps) {
+					// Clamp the desired start within this gap
+					const gapS = Math.max(gap.start, Math.min(s, gap.end - dur));
+					const gapE = gapS + dur;
+					// Distance from cursor to the center of where the chunk would land
+					const center = (gapS + gapE) / 2;
+					const dist = Math.abs(cursorTime - center);
+					if (dist < bestDist) {
+						bestDist = dist;
+						bestS = gapS;
 					}
+				}
+				if (bestS !== null) {
+					s = bestS; en = s + dur;
 				}
 			}
 			if (s < MIN_TIME) { s = MIN_TIME; en = s + dur; }
