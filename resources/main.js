@@ -248,20 +248,32 @@
 		const chunks = getChunks(side);
 
 		if (start < MIN_TIME || start >= MAX_TIME) return;
-		if (end > MAX_TIME) end = MAX_TIME;
 
 		for (const c of chunks) {
 			if (start >= c.start && start < c.end) return;
 		}
 
 		const sorted = [...chunks].sort((a, b) => a.start - b.start);
+
+		// Clamp end downward: find nearest chunk or boundary below clickTime
+		let maxEnd = MAX_TIME;
 		for (const c of sorted) {
-			if (c.start > start && c.start < end) {
-				end = c.start;
+			if (c.start > start) { maxEnd = c.start; break; }
+		}
+		end = Math.min(end, maxEnd);
+
+		// If we couldn't get the full duration downward, expand upward
+		const shortfall = NEW_CHUNK_DURATION - (end - start);
+		if (shortfall > 0) {
+			let minStart = MIN_TIME;
+			for (let i = sorted.length - 1; i >= 0; i--) {
+				if (sorted[i].end <= start) { minStart = sorted[i].end; break; }
 			}
+			start = Math.max(minStart, snap(start - shortfall));
 		}
 
 		end = snap(end);
+		start = snap(start);
 		if (end - start < TICK) return;
 
 		const chunk = { id: state.nextId++, start, end, text: "", colorIndex: 0 };
