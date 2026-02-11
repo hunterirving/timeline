@@ -345,6 +345,21 @@
 		const chunk = findChunkById(drag.chunkId);
 		if (!chunk) { drag = null; return; }
 
+		// Detect cross-track movement during a move drag
+		if (drag.mode === "move") {
+			const midX = window.innerWidth / 2;
+			const targetSide = e.clientX < midX ? "plan" : "actual";
+			if (targetSide !== drag.side) {
+				const sourceChunks = getChunks(drag.side);
+				const idx = sourceChunks.findIndex(c => c.id === drag.chunkId);
+				if (idx !== -1) {
+					sourceChunks.splice(idx, 1);
+					getChunks(targetSide).push(chunk);
+					drag.side = targetSide;
+				}
+			}
+		}
+
 		const column = getColumn(drag.side);
 		const rect = column.getBoundingClientRect();
 		const currentTime = yToTime(e.clientY - rect.top);
