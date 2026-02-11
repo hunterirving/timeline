@@ -376,13 +376,39 @@
 			if (s < MIN_TIME) { s = MIN_TIME; en = s + dur; }
 			if (en > MAX_TIME) { en = MAX_TIME; s = en - dur; }
 
+			const cursorTime = yToTime(e.clientY - rect.top);
 			for (const c of others) {
 				if (s < c.end && en > c.start) {
-					const mid = (Math.max(s, c.start) + Math.min(en, c.end)) / 2;
-					if (s + dur / 2 <= mid) {
-						en = c.start; s = en - dur;
+					const cMid = (c.start + c.end) / 2;
+					const preferAbove = cursorTime <= cMid;
+					if (preferAbove) {
+						const aboveS = c.start - dur;
+						const aboveE = c.start;
+						let aboveOk = aboveS >= MIN_TIME;
+						if (aboveOk) {
+							for (const o of others) {
+								if (o !== c && aboveS < o.end && aboveE > o.start) { aboveOk = false; break; }
+							}
+						}
+						if (aboveOk) {
+							s = aboveS; en = aboveE;
+						} else {
+							s = c.end; en = s + dur;
+						}
 					} else {
-						s = c.end; en = s + dur;
+						const belowS = c.end;
+						const belowE = c.end + dur;
+						let belowOk = belowE <= MAX_TIME;
+						if (belowOk) {
+							for (const o of others) {
+								if (o !== c && belowS < o.end && belowE > o.start) { belowOk = false; break; }
+							}
+						}
+						if (belowOk) {
+							s = belowS; en = belowE;
+						} else {
+							en = c.start; s = en - dur;
+						}
 					}
 				}
 			}
