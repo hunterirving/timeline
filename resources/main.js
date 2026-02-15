@@ -566,7 +566,7 @@
 
 	async function sendTimelineEmail() {
 		mailtoNavigating = true;
-		await window.__timeline_email.sendTimelineEmail(state.actual, TICK, minutesToTime);
+		await window.__timeline_email.sendTimelineEmail(state.plan, state.actual);
 		setTimeout(() => { mailtoNavigating = false; }, 1000);
 	}
 
@@ -690,6 +690,22 @@
 		renderNowLine();
 		checkChimes();
 	}, 5000);
+
+	const urlParams = new URLSearchParams(window.location.search);
+	const encoded = urlParams.get("d");
+	if (encoded) {
+		window.__timeline_codec.decodeTimeline(encoded).then(({ plan, actual }) => {
+			for (const chunk of plan) {
+				chunk.id = state.nextId++;
+				state.plan.push(chunk);
+			}
+			for (const chunk of actual) {
+				chunk.id = state.nextId++;
+				state.actual.push(chunk);
+			}
+			render();
+		});
+	}
 
 	render();
 	checkChimes();
