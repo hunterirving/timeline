@@ -25,7 +25,8 @@ when your day is over, you can use the two columns to reflect on what you accomp
 	</p>
 - a dotted line will move from the top of the screen to the bottom. this is the "now line". 
 - a chime will play whenever a new left column chunk is starting. this is usually a good time to update the right column with recent happenings and settle in for your next task.
-- press `⌘ + m` to export the day's accomplishments as the text body of an email message.
+- press `⌘ + c` to copy a shareable timeline link to the clipboard.
+- press `⌘ + m` to export a shareable timeline link as the body of an email message.
 
 ## license
 <a href="license">GPLv3</a>

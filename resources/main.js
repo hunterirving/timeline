@@ -564,6 +564,31 @@
 		}
 	});
 
+	const copyFeedback = document.createElement("div");
+	copyFeedback.className = "copy-feedback";
+	copyFeedback.textContent = "Copied link to clipboard";
+	document.body.appendChild(copyFeedback);
+
+	function showCopyFeedback() {
+		copyFeedback.classList.remove("fade-out");
+		copyFeedback.classList.add("show");
+		setTimeout(() => {
+			copyFeedback.classList.remove("show");
+			copyFeedback.classList.add("fade-out");
+		}, 1000);
+	}
+
+	async function copyTimelineLink() {
+		const allChunks = [...state.plan, ...state.actual];
+		if (allChunks.length === 0) return;
+		const encoded = await window.__timeline_codec.encodeTimeline(state.plan, state.actual);
+		if (!encoded) return;
+		const base = window.location.origin + window.location.pathname;
+		const link = base + "?d=" + encoded;
+		await navigator.clipboard.writeText(link);
+		showCopyFeedback();
+	}
+
 	async function sendTimelineEmail() {
 		mailtoNavigating = true;
 		await window.__timeline_email.sendTimelineEmail(state.plan, state.actual);
@@ -574,6 +599,11 @@
 		if (e.key === "Shift") document.body.classList.add("shift-held");
 		if (e.key === "Escape") {
 			deselectAll();
+			return;
+		}
+		if (e.key === "c" && (e.metaKey || e.ctrlKey)) {
+			e.preventDefault();
+			copyTimelineLink();
 			return;
 		}
 		if (e.key === "m" && (e.metaKey || e.ctrlKey)) {
