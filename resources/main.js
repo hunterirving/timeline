@@ -1,7 +1,7 @@
 (() => {
 	"use strict";
 
-	const TICK = 5;
+	const TICK = 10;
 	const DEFAULT_START = 8 * 60;
 	const DEFAULT_END = 20 * 60;
 	const MIN_TIME = -4 * 60;
