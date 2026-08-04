@@ -337,7 +337,7 @@
 			origStart: chunk.start,
 			origEnd: chunk.end,
 		};
-		if (mode === "move") document.body.classList.add("dragging");
+		document.body.classList.add(mode === "move" ? "dragging" : "resizing");
 	}
 
 	function onMouseMove(e) {
@@ -448,7 +448,7 @@
 	function onMouseUp() {
 		if (drag) {
 			drag = null;
-			document.body.classList.remove("dragging");
+			document.body.classList.remove("dragging", "resizing");
 			render();
 		}
 	}

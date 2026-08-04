@@ -88,6 +88,11 @@ body.dragging * {
 	cursor: grabbing !important;
 }
 
+body.resizing,
+body.resizing * {
+	cursor: ns-resize !important;
+}
+
 .chunk {
 	position: absolute;
 	left: 0;
