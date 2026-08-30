@@ -1,7 +1,8 @@
 (() => {
 	"use strict";
 
-	const TICK = 10;
+	const TICK = 5;
+	const MIN_CHUNK_DURATION = 10;
 	const DEFAULT_START = 8 * 60;
 	const DEFAULT_END = 20 * 60;
 	const MIN_TIME = -4 * 60;
@@ -275,7 +276,7 @@
 
 		end = snap(end);
 		start = snap(start);
-		if (end - start < TICK) return;
+		if (end - start < MIN_CHUNK_DURATION) return;
 
 		const chunk = { id: state.nextId++, start, end, text: "", colorIndex: 0 };
 		chunks.push(chunk);
@@ -427,7 +428,7 @@
 			if (drag.edge === "top") {
 				let s = snap(drag.origStart + dMin);
 				s = Math.max(MIN_TIME, s);
-				s = Math.min(chunk.end - TICK, s);
+				s = Math.min(chunk.end - MIN_CHUNK_DURATION, s);
 				for (const c of others) {
 					if (c.end > s && c.end <= chunk.end) s = c.end;
 				}
@@ -435,7 +436,7 @@
 			} else {
 				let en = snap(drag.origEnd + dMin);
 				en = Math.min(MAX_TIME, en);
-				en = Math.max(chunk.start + TICK, en);
+				en = Math.max(chunk.start + MIN_CHUNK_DURATION, en);
 				for (const c of others) {
 					if (c.start < en && c.start >= chunk.start) en = c.start;
 				}
