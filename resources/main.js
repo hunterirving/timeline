@@ -13,10 +13,11 @@
 	const COLORS = [
 		{ name: "slate",          var: "--slate" },
 		{ name: "lobster",        var: "--lobster" },
-		{ name: "bubble-yum",     var: "--bubble-yum" },
-		{ name: "grape-soda",     var: "--grape-soda" },
-		{ name: "blue-raspberry", var: "--blue-raspberry" },
+		{ name: "mustard",        var: "--mustard" },
 		{ name: "bramble",        var: "--bramble" },
+		{ name: "blue-raspberry", var: "--blue-raspberry" },
+		{ name: "grape-soda",     var: "--grape-soda" },
+		{ name: "bubble-yum",     var: "--bubble-yum" },
 	];
 
 	const state = {
